@@ -1,5 +1,0 @@
-make --dry-run --always-make --keep-going --print-directory
-make: Entering directory '/home/alex/mine/prmeet'
-make: 'rsync' is up to date.
-make: Leaving directory '/home/alex/mine/prmeet'
- 
