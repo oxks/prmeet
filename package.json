@@ -1,0 +1,22 @@
+{
+  "scripts": {
+    "build": "postcss views/css/styles.css -o views/public/css/styles.css",
+    "prod": "NODE_ENV=production postcss views/css/styles.css -o views/public/css/styles.css"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.5",
+    "tailwindcss": "^2.2.19"
+  },
+  "dependencies": {
+    "postcss-cli": "^9.0.2",
+    "postcss-import": "^14.0.2"
+  },
+  "name": "echo",
+  "version": "1.0.0",
+  "main": "postcss.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
