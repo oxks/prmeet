@@ -13,3 +13,8 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+.vscode
+node_modules
+tmp
+internal/utils/my_utils/config.go
