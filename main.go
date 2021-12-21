@@ -7,6 +7,7 @@ import (
 	mu "prmeet/internal/utils/my_utils"
 	myrouter "prmeet/router"
 
+	"github.com/gobuffalo/envy"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
@@ -22,6 +23,7 @@ func (t *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c 
 }
 
 func main() {
+	envy.Load()
 	e := echo.New()
 	e.Static("/public", "views/public")
 	e.Use(session.Middleware(mu.GetCookieStore()))

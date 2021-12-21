@@ -12,7 +12,7 @@ The library is intended to be a starting point for a project with a simple users
 
 [Go](https://go.dev/doc/install), [Air](https://github.com/cosmtrek/air), [TailwindCSS](https://tailwindcss.com/docs/installation/using-postcss)
 
-Edit internal/utils/my_utils/config.go with your data. 
+Edit env file with your data and rename it to .env 
 
 ## How to run: 
 
