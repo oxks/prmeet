@@ -2,7 +2,7 @@
 
 ![prmeet](views/public/img/prmeet.png)
 
-# This is a boilerplate for [nats-prmeet](https://github.com/oxks/nats-prmeet) microservice. 
+# This is a boilerplate for [nats-prmeet](https://github.com/oxks/prmeet-nats) microservice. 
 
 ## Intention. 
 
