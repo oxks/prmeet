@@ -1,25 +1,25 @@
-package myrouter
+package router
 
 import (
-	uh "prmeet/internal/handler/user"
+	"prmeet/internal/handler/user"
 
 	"github.com/labstack/echo/v4"
 )
 
 func SetupRoutes(app *echo.Echo) {
 
-	app.GET("", uh.IndexPage)
+	app.GET("", user.IndexPage)
 
 	// data related routes
 	users := app.Group("/users")
 
 	// users.Use(my_utils.Auth)
 
-	users.GET("", uh.IndexPage)
-	users.GET("/login", uh.UserLogin)
-	users.GET("/logout", uh.UserLogout)
-	users.POST("/login", uh.UserDoLogin)
-	users.GET("/signup", uh.UserSignup)
-	users.POST("/signup", uh.UserDoSignup)
+	users.GET("", user.IndexPage)
+	users.GET("/login", user.UserLogin)
+	users.GET("/logout", user.UserLogout)
+	users.POST("/login", user.UserDoLogin)
+	users.GET("/signup", user.UserSignup)
+	users.POST("/signup", user.UserDoSignup)
 
 }

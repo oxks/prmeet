@@ -6,7 +6,7 @@ import (
 	"html/template"
 	"io"
 	"prmeet/config"
-	myrouter "prmeet/internal/router"
+	"prmeet/internal/router"
 
 	"github.com/gobuffalo/envy"
 	"github.com/labstack/echo-contrib/session"
@@ -37,6 +37,6 @@ func main() {
 		templates: template.Must(template.ParseGlob("views/layout/**/*.html")),
 	}
 	e.Renderer = renderer
-	myrouter.SetupRoutes(e)
+	router.SetupRoutes(e)
 	e.Logger.Fatal(e.Start("localhost:8001"))
 }
