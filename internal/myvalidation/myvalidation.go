@@ -1,4 +1,4 @@
-package my_validation
+package myvalidation
 
 import (
 	validation "github.com/go-ozzo/ozzo-validation"

@@ -2,10 +2,11 @@ package main
 
 import (
 	"encoding/gob"
+	"fmt"
 	"html/template"
 	"io"
-	mu "prmeet/internal/utils/my_utils"
-	myrouter "prmeet/router"
+	"prmeet/config"
+	myrouter "prmeet/internal/router"
 
 	"github.com/gobuffalo/envy"
 	"github.com/labstack/echo-contrib/session"
@@ -23,10 +24,13 @@ func (t *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c 
 }
 
 func main() {
-	envy.Load()
+	err := envy.Load()
+	if err != nil {
+		fmt.Println(err)
+	}
 	e := echo.New()
 	e.Static("/public", "views/public")
-	e.Use(session.Middleware(mu.GetCookieStore()))
+	e.Use(session.Middleware(config.GetCookieStore()))
 	//now we can use it in the session
 	gob.Register(map[string]interface{}{})
 	renderer := &TemplateRenderer{

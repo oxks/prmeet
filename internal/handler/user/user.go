@@ -3,8 +3,9 @@ package user_handlers
 import (
 	"fmt"
 	"net/http"
-	me "prmeet/internal/utils/my_errors"
-	mu "prmeet/internal/utils/my_utils"
+	"prmeet/internal/auth"
+	"prmeet/internal/er"
+	"prmeet/internal/natsio"
 
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
@@ -13,31 +14,33 @@ import (
 )
 
 func IndexPage(c echo.Context) error {
-	feed := mu.LoadAppData(c)
+	feed := auth.LoadAppData(c)
 	return c.Render(http.StatusOK, "default.go.html", feed)
 }
 
-//show login form
+// show login form
 func UserLogin(c echo.Context) error {
 
-	feed := mu.LoadAppData(c)
+	feed := auth.LoadAppData(c)
 
 	if feed["user"] != nil {
 		sess, err := session.Get("session", c)
-		me.ErrorPrint(err)
+		er.ErrorPrint(err)
 		sess.Values["success"] = "You are logged in."
-		sess.Save(c.Request(), c.Response())
-
+		err = sess.Save(c.Request(), c.Response())
+		if err != nil {
+			fmt.Println(err)
+		}
 		return c.Redirect(http.StatusMovedPermanently, "default.go.html")
 	}
 
 	return c.Render(http.StatusOK, "login.go.html", feed)
 }
 
-//show do login request
+// show do login request
 func UserDoLogin(c echo.Context) error {
 
-	feed := mu.LoadAppData(c)
+	feed := auth.LoadAppData(c)
 
 	email := c.Request().PostFormValue("email")
 	password := c.Request().PostFormValue("password")
@@ -52,10 +55,10 @@ func UserDoLogin(c echo.Context) error {
 		return c.Render(http.StatusBadRequest, "login.go.html", feed)
 	}
 
-	request := mu.M{}
+	request := make(map[string]any)
 	request["email"] = email
 
-	response := mu.AskPipe("users.login.getByEmail", request)
+	response := natsio.AskPipe("users.login.getByEmail", request)
 
 	if response["err"] != nil {
 		fmt.Printf("\nUser not found: %v \nand the error is: %v", email, response["err"])
@@ -65,7 +68,7 @@ func UserDoLogin(c echo.Context) error {
 
 	user := response["user"].(map[string]interface{})
 
-	ok := mu.PasswordCheckHash(password, user["password"].(string))
+	ok := auth.PasswordCheckHash(password, user["password"].(string))
 
 	if !ok {
 		feed["err"] = "Wrong password."
@@ -73,12 +76,15 @@ func UserDoLogin(c echo.Context) error {
 	}
 
 	sess, err := session.Get("session", c)
+	if err != nil {
+		fmt.Println(err)
+	}
 	sess.Values["user"] = user
 
 	fmt.Printf("The sess.Values user is: %v", sess.Values["user"])
 
 	err = sess.Save(c.Request(), c.Response())
-	me.ErrorPrint(err)
+	er.ErrorPrint(err)
 
 	feed["user"] = user
 	feed["success"] = "Successfully logged in."
@@ -88,10 +94,10 @@ func UserDoLogin(c echo.Context) error {
 
 func UserLogout(c echo.Context) error {
 
-	feed := mu.LoadAppData(c)
+	feed := auth.LoadAppData(c)
 
 	sess, err := session.Get("session", c)
-	me.ErrorPrint(err)
+	er.ErrorPrint(err)
 
 	if sess.Values["user"] == nil {
 		feed["success"] = "You did not login."
@@ -101,6 +107,9 @@ func UserLogout(c echo.Context) error {
 	sess.Values["user"] = nil
 
 	err = sess.Save(c.Request(), c.Response())
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	feed["success"] = "Successfully logged out."
 

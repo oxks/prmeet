@@ -1,4 +1,4 @@
-package my_validation
+package myvalidation
 
 import "time"
 

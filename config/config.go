@@ -1,10 +1,9 @@
-package my_utils
+package config
 
 import (
 	"log"
+	"prmeet/internal/er"
 	"strconv"
-
-	me "prmeet/internal/utils/my_errors"
 
 	"github.com/go-redis/redis"
 	"github.com/gobuffalo/envy"
@@ -18,7 +17,7 @@ import (
 func ConnectNats() *nats.Conn {
 
 	nats_url, err := envy.MustGet("NATS_URL")
-	me.ErrorPrint(err)
+	er.ErrorPrint(err)
 	nc, err := nats.Connect(nats_url)
 	if err != nil {
 		log.Fatal(err)
@@ -28,15 +27,15 @@ func ConnectNats() *nats.Conn {
 
 func SendMail(message string) {
 	email, err := envy.MustGet("EMAIL")
-	me.ErrorPrint(err)
+	er.ErrorPrint(err)
 	smtp_server, err := envy.MustGet("SMTP_SERVER")
-	me.ErrorPrint(err)
+	er.ErrorPrint(err)
 	smtp_key, err := envy.MustGet("SMTP_APPLICATION_KEY")
-	me.ErrorPrint(err)
+	er.ErrorPrint(err)
 	smtp_port, err := envy.MustGet("SMTP_PORT")
-	me.ErrorPrint(err)
+	er.ErrorPrint(err)
 	smtp_port_int, err := strconv.Atoi(smtp_port)
-	me.ErrorPrint(err)
+	er.ErrorPrint(err)
 
 	m := gomail.NewMessage()
 	m.SetHeader("From", email)
@@ -53,7 +52,7 @@ func SendMail(message string) {
 
 func GetCookieStore() *redisstore.RedisStore {
 	rds, err := envy.MustGet("REDIS_URL")
-	me.ErrorPrint(err)
+	er.ErrorPrint(err)
 	client := redis.NewClient(&redis.Options{
 		Addr: rds,
 	})
